@@ -2,12 +2,12 @@ import re
 import datetime
 import pandas as pd
 
-class searchRooms:
+class setRoom:
     def __init__(self, roomID):
         self.roomID = roomID # <---- Defines the user room thorugh input. Modify it to take input from the GUI as a command
         return
     
-    def showRooms(self):
+    def searchRoom(self):
         roomMatches = []
         if self.roomID in roomList:
             print(self.roomID) # <---- Shows the room the user was looking for. Modify it to show it in the GUI rather than in the Shell
@@ -20,26 +20,27 @@ class searchRooms:
                 print(roomMatches[j]) # <---- Shows the course Suggestions to the user. Modify it to show it in the GUI rather than in the Shell
         return
 
-class searchCourse:
+class setCourse:
     def __init__(self, courseID):
         self.courseID = courseID # <----- Defines the user course though input. Modify it to take input from the GUI as a command
         return
     
-    def showCourses(self):
+    def searchCourse(self):
         courseMatches = []
-        if self.courseID in roomList:
+        if self.courseID in courseList:
             print(self.courseID) # <----- Shows the course the user was looking for. Modify it to show it in the GUI rather than in the Shell
         else:
-            for i in range(len(roomList)):
-                check_room = re.search(self.courseID, roomList[i]) # Finds courses that start with what the user has input
+            for i in range(len(courseList)):
+                check_room = re.search(self.courseID, courseList[i]) # Finds courses that start with what the user has input
                 if check_room is not None:
-                    courseMatches.append(roomList[i]) # Adds possible courses that the user may be looking for
+                    courseMatches.append(courseList[i]) # Adds possible courses that the user may be looking for
             for j in range(len(courseMatches)):
                 print(courseMatches[j]) # <----- Shows the course Suggestions to the user. Modify it to show it in the GUI rather than in the Shell
         return
 
-class setSchedule:
-    def __init__(self, month, day, year):
+class setDate:
+    # The default values are the current date
+    def __init__(self, month = datetime.datetime.now().strftime("%m"), day = datetime.datetime.now().strftime("%d"), year = datetime.datetime.now().strftime("%Y")):
         # Get values of day, month, year from the user as inputs from GUI
         # ------------------
         self.month = month 
@@ -54,7 +55,7 @@ class setSchedule:
         return userDate
 
 class setTime:
-    def __init__(self, startHours, startMin = 0, endHours, endMin = 0, start_PM = False, end_PM = False):
+    def __init__(self, startHours, startMin, endHours, endMin, start_PM = False, end_PM = False):
         # Get values from the user in hours
         # ------------------------------------------------
         if (startHours < 12) and (endHours < 12): # The time format can only be between 0 and 12
@@ -85,15 +86,14 @@ class setTime:
         endTime = datetime.datetime.strptime(convertEnd, "%H:%M").time()
         return endTime
         
-    
 # Import data from excel
 # -----------------------------------------------------------------------------------------
 courseData = pd.read_excel("CourseList.xlsx") # Imports the excel file "CourseList.xlsx" with the names of the courses
+roomData = pd.read_excel("RoomList.xlsx") # Imports the excel file "RoomList.xlsx" with the name of the rooms
+
 meetingDays = pd.read_excel("MeetingTimes.xlsx")
 courseDuration = pd.read_excel("CreditDuration.xlsx")
 setScheduleData = pd.read_excel("SetSchedule.xlsx")
-
-roomData = pd.read_excel("RoomList.xlsx") # Imports the excel file "RoomList.xlsx" with the name of the rooms
 # -----------------------------------------------------------------------------------------
 
 # Convert excel files to dictionaries or lists
